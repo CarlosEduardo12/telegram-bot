@@ -1,0 +1,38 @@
+name: Rodar bot DeFi a cada 60 minutos
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'  # Executa a cada 15 minutos
+  workflow_dispatch:        # Permite rodar manualmente também
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositório
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependências
+        run: |
+          pip install -r requirements.txt
+
+      - name: Rodar o bot
+        env:
+          # 🔧 Configurações principais
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          CHECK_INTERVAL : ${{ secrets.CHECK_INTERVAL }}
+          # 🔧 APIs
+          TELEGRAM_API : ${{ secrets.TELEGRAM_API }}
+          COINGECKO_API : ${{ secrets.COINGECKO_API }}
+          # 📊 Dados do empréstimo
+          COLATERAL_BTC : ${{ secrets.COLATERAL_BTC }}
+          BORROW_R : ${{ secrets.BORROW_R }}
+        run: |
+          python main.py
