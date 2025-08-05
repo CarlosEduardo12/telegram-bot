@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # 🔧 Configurações principais
-TOKEN = os.getenv('TOKEN')
-CHAT_ID = os.getenv('CHAT_ID')
+TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
+TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
 CHECK_INTERVAL = int(os.getenv('CHECK_INTERVAL'))
 
 # 📊 Dados do empréstimo
@@ -32,8 +32,8 @@ TELEGRAM_API = os.getenv('TELEGRAM_API')
 
 # Envia mensagem pelo Telegram
 def send_telegram_message(message):
-    url = f"{TELEGRAM_API}{TOKEN}/sendMessage"
-    data = {'chat_id': CHAT_ID, 'text': message}
+    url = f"{TELEGRAM_API}{TELEGRAM_TOKEN}/sendMessage"
+    data = {'TELEGRAM_CHAT_ID': TELEGRAM_CHAT_ID, 'text': message}
     response = requests.post(url, data=data)
     if not response.ok:
         print("Erro ao enviar mensagem:", response.text)
