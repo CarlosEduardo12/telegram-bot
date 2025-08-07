@@ -136,7 +136,7 @@ def main():
 
     # Verifica se é horário do relatório diário (22h)
     now = datetime.now()
-    if now.hour == 13 and now.minute < 55:  # executa entre 22:00 e 22:15
+    if now.hour == 22 and now.minute < 15:  # executa entre 22:00 e 22:15
         relatorio = monitor.gerar_relatorio_diario()
         if relatorio:
             bot.send_message(TELEGRAM_CHAT_ID, relatorio)
