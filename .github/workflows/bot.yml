@@ -2,12 +2,14 @@ name: Rodar bot DeFi a cada 60 minutos
 
 on:
   schedule:
-    - cron: '*/15 * * * *'  # Executa a cada 15 minutos
-  workflow_dispatch:        # Permite rodar manualmente também
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
 
 jobs:
   run-bot:
     runs-on: ubuntu-latest
+    environment: main
+    timeout-minutes: 10
 
     steps:
       - name: Clonar repositório
@@ -17,22 +19,36 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: 'pip'
 
       - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Verificar variáveis de ambiente
         run: |
-          pip install -r requirements.txt
+          if [ -z "$TELEGRAM_TOKEN" ]; then
+            echo "Error: TELEGRAM_TOKEN não está definido"
+            exit 1
+          fi
+          if [ -z "$TELEGRAM_CHAT_ID" ]; then
+            echo "Error: TELEGRAM_CHAT_ID não está definido"
+            exit 1
+          fi
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
 
       - name: Rodar o bot
+        timeout-minutes: 5
         env:
           # 🔧 Configurações principais
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          CHECK_INTERVAL : ${{ secrets.CHECK_INTERVAL }}
+          CHECK_INTERVAL: ${{ secrets.CHECK_INTERVAL }}
           # 🔧 APIs
-          TELEGRAM_API : ${{ secrets.TELEGRAM_API }}
-          COINGECKO_API : ${{ secrets.COINGECKO_API }}
+          TELEGRAM_API: ${{ secrets.TELEGRAM_API }}
+          COINGECKO_API: ${{ secrets.COINGECKO_API }}
           # 📊 Dados do empréstimo
-          COLATERAL_BTC : ${{ secrets.COLATERAL_BTC }}
-          BORROW_R : ${{ secrets.BORROW_R }}
-        run: |
-          python main.py
+          COLATERAL_BTC: ${{ secrets.COLATERAL_BTC }}
+          BORROW_R: ${{ secrets.BORROW_R }}
+        run: python main.py
