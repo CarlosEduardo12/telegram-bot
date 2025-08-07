@@ -1,4 +1,4 @@
 requests==2.31.0
-python-dotenv==0.9.9
+python-dotenv==1.1.1
 pyTelegramBotAPI==4.28.0
 telebot==0.0.5
