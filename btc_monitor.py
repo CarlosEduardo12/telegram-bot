@@ -11,7 +11,7 @@ from exception_handler import APIError
 if not os.getenv("GITHUB_ACTIONS"):
     from dotenv import load_dotenv
 
-load_dotenv()
+    load_dotenv()
 
 # Configurações
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
