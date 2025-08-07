@@ -2,7 +2,8 @@ name: Rodar bot DeFi a cada 60 minutos
 
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '*/30 * * * *'  # Monitoramento a cada 15min
+    - cron: '0 22 * * *'    # Relatório diário às 22h
   workflow_dispatch:
 
 jobs:
